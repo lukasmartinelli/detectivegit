@@ -8,12 +8,12 @@ var bodyParser = require('body-parser');
 var http = require('http').Server(app);
 
 var options = {
-    port: process.env.VCAP_APP_PORT || 3000,
+    port: process.env.VCAP_APP_PORT || 3000
 };
 
-app.engine('hbs', handlebars({extname:'hbs', defaultLayout:'main.hbs'}));
+app.engine('hbs', handlebars({extname: 'hbs', defaultLayout: 'main.hbs'}));
 app.set('view engine', 'hbs');
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, '/public')));
 
 require('./api')(app);

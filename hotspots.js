@@ -19,7 +19,7 @@ function clone(dirPath, repo) {
 function findDefaultBranch(repoPath) {
         console.log('Looking for default branch' + path.resolve(repoPath));
     return exec('git rev-parse --abbrev-ref HEAD', { cwd: path.resolve(repoPath) }).then(function(stdout) {
-        return stdout[0].trim()
+        return stdout[0].trim();
     });
 }
 
@@ -28,9 +28,9 @@ function parseBugspotLine(line) {
     var match = re.exec(line);
     if(match) {
         return {
-            score : match[1],
+            score: match[1],
             path: match[2]
-        }
+        };
     }
 }
 
@@ -45,7 +45,7 @@ function bugspot(repoName, repoPath, defaultBranch) {
             prediction.url = 'https://github.com/' + repoName + '/commits/' + defaultBranch + '/' + prediction.path;
             return prediction;
         });
-        return predictions.slice(0,10);
+        return predictions.slice(0, 10);
     }, function(err) {
         console.error(err);
     });
