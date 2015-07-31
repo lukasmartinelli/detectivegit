@@ -45,6 +45,8 @@ function bugspot(repoName, repoPath, defaultBranch) {
         var lines = output.split('\n');
         var predictions = lines.map(parseBugspotLine).filter(function(r) {
             return r !== undefined;
+        }).filter(function(r) {
+            return r.score !== '0.0000';
         }).map(function(prediction) {
             prediction.url = 'https://github.com/' + repoName + '/commits/' + defaultBranch + '/' + prediction.path;
             return prediction;
@@ -57,8 +59,9 @@ function bugspot(repoName, repoPath, defaultBranch) {
 
 
 function hotspots(repoName, repoPath, defaultBranch) {
-    console.log('Analyzing git hotspots ' + path.resolve(repoPath));
-    return exec('git log --pretty=format: --name-only | sort | uniq -c | sort -rg | head -n 10', { cwd: path.resolve(repoPath) }).then(function(stdout) {
+    console.log('Analyzing git hotspots ' + repoPath);
+    var cmd = 'git log --pretty=format: --name-only | sort | uniq -c | sort -rg | head -n 10';
+    return exec(cmd, { cwd: repoPath }).then(function(stdout) {
         var gitOutput = stdout[0];
         return gitOutput.split('\n').map(function(line) {
             var columns = line.trim().split(' ');
