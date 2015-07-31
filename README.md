@@ -1,14 +1,25 @@
 # detectivegit
 
+Detective git takes a look at your repository and shows you
+where your hotspots and possible bugs are.
+
 ![Screenshot of Flinter](screenshot.png)
 
 ## How it works
 
-flinter works a bit differently - instead of receiving updates about a repo
-via a webhook we just track all C++ repos via the [Github Realtime Realy](https://github.com/lukasmartinelli/ghrr).
+### Hotspots
 
-## API
+Detecting hotspots is just some bash hackery:
 
-There is a single ressource `Repo` which encapsulates a repository
-flinter keeps track of.
+```bash
+git log --pretty=format: --name-only | sort | uniq -c | sort -rg | head -n 10'
+```
 
+### Bug prediction
+
+Using [igrigorik/bugspots](https://github.com/igrigorik/bugspots) to guess
+where bugs might occur (based on [Google's bug prediction heuristic](http://google-engtools.blogspot.ch/2011/12/bug-prediction-at-google.html)).
+
+```
+bugspots .
+```
