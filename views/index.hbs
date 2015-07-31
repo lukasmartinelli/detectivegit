@@ -20,7 +20,7 @@
         </tr>
         </thead>
         <tbody id="repo-results" class="list">
-         {{#each repo.fileReports}}
+         {{#each repo.hotspotReport}}
          <tr>
           <td class="modifications">
           {{this.modifications}}
@@ -32,6 +32,33 @@
          {{/each}}
          </tbody>
          </table>
+
+        <h3>Predicted bugs</h3>
+         <table class="filereport-table">
+         <colgroup>
+            <col style="width:85px;" span="1">
+            <col style="width:90%;" span="1">
+         </colgroup>
+         <thead>
+        <tr>
+            <td class="repository">Score</td>
+            <td class="status">Path</td>
+        </tr>
+        </thead>
+        <tbody id="repo-results" class="list">
+         {{#each repo.bugspotReport}}
+         <tr>
+          <td class="score">
+          {{this.score}}
+          </td>
+          <td class="filename">
+          <a href="{{this.url}}">{{this.path}}</a>
+          </td>
+         </tr>
+         {{/each}}
+         </tbody>
+         </table>
+
         {{/if}}
     </article>
 </section>

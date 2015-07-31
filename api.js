@@ -9,12 +9,13 @@ module.exports = function(app) {
     app.post('/', function(req, res) {
         var name = req.body.name;
 
-        hotspots.analyze(name).then(function(fileReports) {
+        hotspots.analyze(name).then(function(report) {
             res.render('index', {
                 repo: {
                     name: name,
                     url: 'https://github.com/' + name,
-                    fileReports: fileReports
+                    hotspotReport: report.hotspotReport,
+                    bugspotReport: report.bugspotReport
                 }
             });
         });

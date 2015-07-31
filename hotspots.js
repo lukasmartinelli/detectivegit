@@ -23,21 +23,48 @@ function findDefaultBranch(repoPath) {
     });
 }
 
-function hotspots(repoPath) {
-    return findDefaultBranch(repoPath).then(function(defaultBranch) {
-        console.log('Analyzing git hotspots ' + path.resolve(repoPath));
-        return exec('git log --pretty=format: --name-only | sort | uniq -c | sort -rg | head -n 10', { cwd: path.resolve(repoPath) }).then(function(stdout) {
-            var gitOutput = stdout[0];
-            return gitOutput.split('\n').map(function(line) {
-                var columns = line.trim().split(' ');
-                return {
-                    modifications: columns[0],
-                    path: columns[1],
-                    url: 'https://github.com/lukasmartinelli/flinter/commits/' + defaultBranch + '/' + columns[1]
-                };
-            }).filter(function(fileReport) {
-                return fileReport.modifications && fileReport.path;
-            });
+function parseBugspotLine(line) {
+    var re = /(\d\.\d{4}) - (.*)/;
+    var match = re.exec(line);
+    if(match) {
+        return {
+            score : match[1],
+            path: match[2]
+        }
+    }
+}
+
+function bugspot(repoName, repoPath, defaultBranch) {
+    console.log('Analyzing future bugs ' + path.resolve(repoPath));
+    return exec('bugspots .', { cwd: repoPath }).then(function(stdout) {
+        var output = stdout[0];
+        var lines = output.split('\n');
+        var predictions = lines.map(parseBugspotLine).filter(function(r) {
+            return r !== undefined;
+        }).map(function(prediction) {
+            prediction.url = 'https://github.com/' + repoName + '/commits/' + defaultBranch + '/' + prediction.path;
+            return prediction;
+        });
+        return predictions.slice(0,10);
+    }, function(err) {
+        console.error(err);
+    });
+}
+
+
+function hotspots(repoName, repoPath, defaultBranch) {
+    console.log('Analyzing git hotspots ' + path.resolve(repoPath));
+    return exec('git log --pretty=format: --name-only | sort | uniq -c | sort -rg | head -n 10', { cwd: path.resolve(repoPath) }).then(function(stdout) {
+        var gitOutput = stdout[0];
+        return gitOutput.split('\n').map(function(line) {
+            var columns = line.trim().split(' ');
+            return {
+                modifications: columns[0],
+                path: columns[1],
+                url: 'https://github.com/' + repoName + '/commits/' + defaultBranch + '/' + columns[1]
+            };
+        }).filter(function(fileReport) {
+            return fileReport.modifications && fileReport.path;
         });
     });
 }
@@ -49,7 +76,19 @@ exports.analyze = function analyze(repo) {
             var repoPath = path.join(dirPath, repoName);
             return repoPath;
         })
-        .then(hotspots)
+        .then(function(repoPath) {
+            return findDefaultBranch(repoPath).then(function(defaultBranch) {
+                return Q.all([
+                    hotspots(repo, repoPath, defaultBranch),
+                    bugspot(repo, repoPath, defaultBranch)
+                ]).then(function(results) {
+                    return {
+                        hotspotReport: results[0],
+                        bugspotReport: results[1]
+                    };
+                });
+            });
+        })
         .fin(function() {
             console.log('Cleaning up ' + dirPath);
             rmdir(dirPath);
