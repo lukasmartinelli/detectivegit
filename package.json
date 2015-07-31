@@ -1,0 +1,38 @@
+{
+  "name": "detectivegit",
+  "version": "0.2.0",
+  "description": "Git analytics for Github Repositories",
+  "main": "server.js",
+  "scripts": {
+    "test": "gulp test",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lukasmartinelli/detectivegit.git"
+  },
+  "keywords": [
+    "github",
+    "git"
+  ],
+  "author": "Lukas Martinelli",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lukasmartinelli/detectivegit/issues"
+  },
+  "homepage": "https://github.com/lukasmartinelli/detectivegit",
+  "dependencies": {
+    "body-parser": "^1.11.0",
+    "express": "^4.10.2",
+    "github": "^0.2.3",
+    "mkdirp": "^0.5.0",
+    "q": "^1.4.1",
+    "request": "^2.49.0",
+    "rimraf": "^2.4.2",
+    "temp": "^0.8.3"
+  },
+  "devDependencies": {
+    "gulp": "^3.8.10",
+    "gulp-eslint": "^0.2.0"
+  }
+}
