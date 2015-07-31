@@ -24,6 +24,7 @@
   "dependencies": {
     "body-parser": "^1.11.0",
     "express": "^4.10.2",
+    "express-handlebars": "^2.0.1",
     "github": "^0.2.3",
     "mkdirp": "^0.5.0",
     "q": "^1.4.1",

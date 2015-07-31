@@ -3,26 +3,20 @@ var hotspots = require('./hotspots');
 
 module.exports = function(app) {
     app.get('/', function(req, res) {
-        res.format({
-            html: function() {
-                res.sendFile('index.html', {root: './public'});
-            },
-            json: function() {
-                return res.json({});
-            }
-        });
+        res.render('index', {});
     });
 
-    app.get('/:owner/:repo', function(req, res) {
-        var fullName = req.params.owner + '/' + req.params.repo;
-        console.log('Status for ' + fullName + ' requested');
+    app.post('/', function(req, res) {
+        var name = req.body.name;
 
-        repo.analyze(fullName).then(function(lines) {
-           res.json(lines);
-        }, function(err) {
-            console.log('Could not find repo ' + fullName);
-            res.status(404);
-            res.send(err.message);
+        hotspots.analyze(name).then(function(lines) {
+            console.log(lines);
+            res.render('index', {
+                repo: {
+                    name: name,
+                    lines: lines
+                }
+            });
         });
     });
 };

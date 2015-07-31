@@ -1,0 +1,13 @@
+<section class="main">
+    <form method="POST" action="/" id="repo-analyze" class="clearfix">
+        <input id="repo-search" name="name" class="search-box" placeholder="Your GitHub repository" autofocus="">
+        <button type="submit" class="search-submit">Analyze</button>
+    </form>
+    <hr/>
+    <article class="repo-info">
+        {{#if repo}}
+        <h2>Report for {{repo.name}}</h2>
+
+        {{/if}}
+    </article>
+</section>

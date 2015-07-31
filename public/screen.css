@@ -28,10 +28,18 @@ a:hover {
     color: #2C5AA0;
 }
 
-h1 {
+h1, h2, h3 {
 	font-family: 'audimatregular', 'sans-serif';
+}
+
+h1 {
 	font-size: 8rem;
 	display: inline-block;
+    margin: 0.5rem;
+}
+
+h2 {
+	font-size: 5rem;
     margin: 0.5rem;
 }
 
@@ -45,17 +53,27 @@ table {
     margin-bottom: -1rem;
 }
 
+.repo-info {
+    margin-top: 2rem;
+    padding: 0 1rem;
+}
+
+hr {
+    margin-top: 1rem;
+    border: 1px solid #384061;
+}
+
 .search-box {
 	font-family: 'audimatregular', 'sans-serif';
     font-size: 2.7rem;
     font-style: italic;
     font-weight: 100;
-    width: 80%;
     height: 5.5rem;
     padding: 0 1rem;
     margin: 0.5rem;
-    display: inline-block;
     border: 1px solid #384061;
+    float: left;
+    max-width: 700px;
 }
 
 .search-box:focus {
@@ -71,9 +89,39 @@ table {
     background-color: #131A38;
     color: #fff;
 
-    height: 5.6rem;
+    height: 5.7rem;
     padding: 0 1rem;
     margin: 0.5rem;
-    width: 15%;
-    display: inline-block;
+    min-width: 15rem;
+    float: left;
+    cursor: pointer;
+}
+
+@media screen and (min-width: 900px) {
+    .search-box {
+        width: 75%;
+    }
+
+    .search-submit {
+        width: 15%;
+    }
+}
+
+
+@media screen and (max-width: 850px) {
+    .branding img {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    h1 {
+        font-size: 4.7rem;
+    }
+}
+
+.clearfix:after {
+  content: "";
+  display: table;
+  clear: both;
 }

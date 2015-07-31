@@ -19,6 +19,7 @@ function hotspots(repoPath) {
     console.log('Analyzing git hotspots ' + path.resolve(repoPath));
     return exec('git log --pretty=format: --name-only | sort | uniq -c | sort -rg').then(function(stdout) {
         var gitOutput = stdout[0];
+        console.log(gitOutput);
         var lines = gitOutput.split('\r\n');
         return lines;
     });
