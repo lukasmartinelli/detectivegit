@@ -2,6 +2,7 @@
 var path = require('path');
 var Q = require('q');
 var exec = Q.denodeify(require('child_process').exec);
+var execFile = Q.denodeify(require('child_process').execFile);
 var rmdir = Q.denodeify(require('rimraf'));
 var temp = require('temp');
 var mkdtemp = Q.denodeify(temp.mkdir);
@@ -17,11 +18,17 @@ function clone(dirPath, repo) {
 
 function hotspots(repoPath) {
     console.log('Analyzing git hotspots ' + path.resolve(repoPath));
-    return exec('git log --pretty=format: --name-only | sort | uniq -c | sort -rg').then(function(stdout) {
+    return exec('git log --pretty=format: --name-only | sort | uniq -c | sort -rg', { cwd: path.resolve(repoPath) }).then(function(stdout) {
         var gitOutput = stdout[0];
-        console.log(gitOutput);
-        var lines = gitOutput.split('\r\n');
-        return lines;
+        return gitOutput.split('\n').map(function(line) {
+            var columns = line.trim().split(' ');
+            return {
+                modifications: columns[0],
+                path: columns[1]
+            };
+        }).filter(function(fileReport) {
+            return fileReport.modifications && fileReport.path;
+        });
     });
 }
 
