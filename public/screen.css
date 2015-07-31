@@ -43,6 +43,11 @@ h2 {
     margin: 0.5rem;
 }
 
+h3 {
+	font-size: 3rem;
+    margin: 0.5rem;
+}
+
 table {
     border-collapse: collapse;
     border-spacing: 0px;
@@ -124,4 +129,24 @@ hr {
   content: "";
   display: table;
   clear: both;
+}
+
+.filereport-table {
+    width: 100%;
+    color: #333;
+    font-weight: 300;
+}
+
+.filereport-table thead {
+    border-bottom: 2px solid #333;
+    font-weight: bold;
+}
+
+.filereport-table tbody tr td {
+    border-right: 1px solid #EEE;
+    border-bottom: 1px solid #EEE;
+}
+.filereport-table td {
+    white-space: nowrap;
+    padding: 0.5rem 1rem;
 }

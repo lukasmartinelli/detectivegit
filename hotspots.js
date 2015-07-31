@@ -16,18 +16,28 @@ function clone(dirPath, repo) {
     return execFile('git', ['clone', '-q', cloneUrl], { cwd: dirPath });
 }
 
+function findDefaultBranch(repoPath) {
+        console.log('Looking for default branch' + path.resolve(repoPath));
+    return exec('git rev-parse --abbrev-ref HEAD', { cwd: path.resolve(repoPath) }).then(function(stdout) {
+        return stdout[0].trim()
+    });
+}
+
 function hotspots(repoPath) {
-    console.log('Analyzing git hotspots ' + path.resolve(repoPath));
-    return exec('git log --pretty=format: --name-only | sort | uniq -c | sort -rg', { cwd: path.resolve(repoPath) }).then(function(stdout) {
-        var gitOutput = stdout[0];
-        return gitOutput.split('\n').map(function(line) {
-            var columns = line.trim().split(' ');
-            return {
-                modifications: columns[0],
-                path: columns[1]
-            };
-        }).filter(function(fileReport) {
-            return fileReport.modifications && fileReport.path;
+    return findDefaultBranch(repoPath).then(function(defaultBranch) {
+        console.log('Analyzing git hotspots ' + path.resolve(repoPath));
+        return exec('git log --pretty=format: --name-only | sort | uniq -c | sort -rg | head -n 10', { cwd: path.resolve(repoPath) }).then(function(stdout) {
+            var gitOutput = stdout[0];
+            return gitOutput.split('\n').map(function(line) {
+                var columns = line.trim().split(' ');
+                return {
+                    modifications: columns[0],
+                    path: columns[1],
+                    url: 'https://github.com/lukasmartinelli/flinter/commits/' + defaultBranch + '/' + columns[1]
+                };
+            }).filter(function(fileReport) {
+                return fileReport.modifications && fileReport.path;
+            });
         });
     });
 }

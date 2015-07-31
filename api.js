@@ -13,6 +13,7 @@ module.exports = function(app) {
             res.render('index', {
                 repo: {
                     name: name,
+                    url: 'https://github.com/' + name,
                     fileReports: fileReports
                 }
             });

@@ -3,11 +3,35 @@
         <input id="repo-search" name="name" class="search-box" placeholder="Your GitHub repository" autofocus="">
         <button type="submit" class="search-submit">Analyze</button>
     </form>
-    <hr/>
     <article class="repo-info">
         {{#if repo}}
-        <h2>Report for {{repo.name}}</h2>
+        <h2>Report for <a href="{{repo.url}}">{{repo.name}}</a></h2>
 
+        <h3>Hotspots</h3>
+         <table class="filereport-table">
+         <colgroup>
+            <col style="width:85px;" span="1">
+            <col style="width:90%;" span="1">
+         </colgroup>
+         <thead>
+        <tr>
+            <td class="repository">Modifications</td>
+            <td class="status">Path</td>
+        </tr>
+        </thead>
+        <tbody id="repo-results" class="list">
+         {{#each repo.fileReports}}
+         <tr>
+          <td class="modifications">
+          {{this.modifications}}
+          </td>
+          <td class="filename">
+          <a href="{{this.url}}">{{this.path}}</a>
+          </td>
+         </tr>
+         {{/each}}
+         </tbody>
+         </table>
         {{/if}}
     </article>
 </section>
