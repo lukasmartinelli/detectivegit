@@ -1,6 +1,7 @@
 'use strict';
 var hotspots = require('./hotspots');
 
+
 module.exports = function(app) {
     app.get('/', function(req, res) {
         res.render('index', {});

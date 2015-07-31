@@ -58,9 +58,12 @@ table {
     margin-bottom: -1rem;
 }
 
+.main {
+    padding: 0 1rem;
+}
+
 .repo-info {
     margin-top: 2rem;
-    padding: 0 1rem;
 }
 
 hr {
