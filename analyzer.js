@@ -17,9 +17,13 @@ function clone(dirPath, repo) {
 }
 
 function findDefaultBranch(repoPath) {
-        console.log('Looking for default branch' + path.resolve(repoPath));
-    return exec('git rev-parse --abbrev-ref HEAD', { cwd: path.resolve(repoPath) }).then(function(stdout) {
+    console.log('Looking for default branch' + repoPath);
+    var options = { cwd: repoPath };
+    return exec('git rev-parse --abbrev-ref HEAD', options).then(function(stdout) {
         return stdout[0].trim();
+    }, function(err) {
+        console.error(err);
+        return 'master';
     });
 }
 
@@ -69,7 +73,7 @@ function hotspots(repoName, repoPath, defaultBranch) {
     });
 }
 
-exports.analyze = function analyze(repo) {
+module.exports = function analyze(repo) {
     return mkdtemp('detectivegit').then(function(dirPath) {
         return clone(dirPath, repo).then(function() {
             var repoName = repo.split('/')[1];
@@ -83,11 +87,14 @@ exports.analyze = function analyze(repo) {
                     bugspot(repo, repoPath, defaultBranch)
                 ]).then(function(results) {
                     return {
-                        hotspotReport: results[0],
-                        bugspotReport: results[1]
+                        hotspots: results[0],
+                        bugspot: results[1]
                     };
                 });
             });
+        })
+        .catch(function(err) {
+            console.error(err);
         })
         .fin(function() {
             console.log('Cleaning up ' + dirPath);

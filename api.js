@@ -1,6 +1,5 @@
 'use strict';
-var hotspots = require('./hotspots');
-
+var analyze = require('./analyzer');
 
 module.exports = function(app) {
     app.get('/', function(req, res) {
@@ -10,13 +9,13 @@ module.exports = function(app) {
     app.post('/', function(req, res) {
         var name = req.body.name;
 
-        hotspots.analyze(name).then(function(report) {
+        analyze(name).then(function(report) {
             res.render('index', {
                 repo: {
                     name: name,
                     url: 'https://github.com/' + name,
-                    hotspotReport: report.hotspotReport,
-                    bugspotReport: report.bugspotReport
+                    hotspots: report.hotspots,
+                    bugspot: report.bugspot
                 }
             });
         });
