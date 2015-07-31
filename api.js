@@ -15,7 +15,8 @@ module.exports = function(app) {
                     name: name,
                     url: 'https://github.com/' + name,
                     hotspots: report.hotspots,
-                    bugspot: report.bugspot
+                    bugspot: report.bugspot,
+                    cpd: report.cpd
                 }
             });
         });

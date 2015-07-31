@@ -59,6 +59,38 @@
          </tbody>
          </table>
 
+        <h3>Copy Paste Detection</h3>
+         <table class="filereport-table">
+         <colgroup>
+            <col style="width:85px;" span="1">
+            <col style="width:90%;" span="1">
+         </colgroup>
+         <thead>
+        <tr>
+            <td class="repository">Lines</td>
+            <td class="status">Files</td>
+        </tr>
+        </thead>
+        <tbody id="repo-results" class="list">
+         {{#each repo.cpd}}
+         <tr>
+          <td class="score">
+          {{this.lineCount}}
+          </td>
+          <td class="filename">
+          <ul>
+          {{#each this.duplicationFiles}}
+              <li>
+                  <a href="{{this.url}}">{{this.fileName}} (L{{this.lineFrom}}-L{{this.lineTo}})</a>
+              </li>
+          {{/each}}
+          </ul>
+          </td>
+         </tr>
+         {{/each}}
+         </tbody>
+         </table>
+
         {{/if}}
     </article>
 </section>

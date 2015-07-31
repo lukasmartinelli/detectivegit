@@ -153,3 +153,13 @@ hr {
     white-space: nowrap;
     padding: 0.5rem 1rem;
 }
+
+.filereport-table ul {
+    padding: 0px;
+    margin: 0px;
+}
+
+.filereport-table ul li {
+    list-style-type: none;
+    padding: 0.5rem 0px;
+}

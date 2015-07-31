@@ -3,6 +3,7 @@ var path = require('path');
 var Q = require('q');
 var exec = Q.denodeify(require('child_process').exec);
 var execFile = Q.denodeify(require('child_process').execFile);
+var execFileOldschool = require('child_process').execFile;
 var rmdir = Q.denodeify(require('rimraf'));
 var temp = require('temp');
 var mkdtemp = Q.denodeify(temp.mkdir);
@@ -19,7 +20,8 @@ function clone(dirPath, repo) {
 function findDefaultBranch(repoPath) {
     console.log('Looking for default branch' + repoPath);
     var options = { cwd: repoPath };
-    return exec('git rev-parse --abbrev-ref HEAD', options).then(function(stdout) {
+    var cmd = 'git rev-parse --abbrev-ref HEAD';
+    return exec(cmd, options).then(function(stdout) {
         return stdout[0].trim();
     }, function(err) {
         console.error(err);
@@ -38,8 +40,54 @@ function parseBugspotLine(line) {
     }
 }
 
+function cpd(repoName, repoPath, defaultBranch, language) {
+    console.log('Code duplication for ' + language + ' in ' + repoPath);
+    var deferred = Q.defer();
+    var args = ['--minimum-tokens', '20', '--language', language, '--files',  repoPath, '--exclude', 'node_modules', '--format', 'csv'];
+    execFileOldschool('/usr/bin/cpd', args, { cwd: repoPath }, function(err, stdout, stderr) {
+        if(err && err.code !== 4) {
+            q.reject(err);
+        }
+        var output = stdout.split('\n').slice(1);
+        var results = output.map(function(line) {
+            var columns = line.split(',');
+
+            if(columns.length > 3) {
+                var lineCount = parseInt(columns[0]);
+                var tokenCount = parseInt(columns[1]);
+                var occurrences = parseInt(columns[2]);
+
+                var duplicationFiles = [];
+                for(var i = 1; i < 2 * occurrences; i+=2) {
+                    var lineNumber = parseInt(columns[2 + i]);
+                    var lineTo = lineNumber + lineCount;
+                    var fileName = columns[2 + i+1].replace(repoPath + '/', '');
+                    duplicationFiles.push( {
+                        lineNumber: lineNumber,
+                        fileName: fileName,
+                        lineFrom: lineNumber,
+                        lineTo: lineTo,
+                        url: 'https://github.com/' + repoName + '/blob/' + defaultBranch + '/' + fileName + '#L' + lineNumber + '-' + 'L' + lineTo
+                    });
+                }
+
+                return {
+                    lineCount: lineCount,
+                    tokenCount: tokenCount,
+                    duplicationFiles: duplicationFiles
+                }
+            }
+        }).filter(function(r) {
+            return r !== undefined;
+        });
+        deferred.resolve(results);
+
+    });
+    return deferred.promise;
+}
+
 function bugspot(repoName, repoPath, defaultBranch) {
-    console.log('Analyzing future bugs ' + path.resolve(repoPath));
+    console.log('Analyzing future bugs ' + repoPath);
     return exec('bugspots .', { cwd: repoPath }).then(function(stdout) {
         var output = stdout[0];
         var lines = output.split('\n');
@@ -51,7 +99,7 @@ function bugspot(repoName, repoPath, defaultBranch) {
             prediction.url = 'https://github.com/' + repoName + '/commits/' + defaultBranch + '/' + prediction.path;
             return prediction;
         });
-        return predictions.slice(0, 10);
+        return predictions;
     }, function(err) {
         console.error(err);
     });
@@ -81,17 +129,25 @@ module.exports = function analyze(repo) {
         return clone(dirPath, repo).then(function() {
             var repoName = repo.split('/')[1];
             var repoPath = path.join(dirPath, repoName);
-            return repoPath;
+            return path.resolve(repoPath);
         })
         .then(function(repoPath) {
             return findDefaultBranch(repoPath).then(function(defaultBranch) {
                 return Q.all([
                     hotspots(repo, repoPath, defaultBranch),
-                    bugspot(repo, repoPath, defaultBranch)
+                    bugspot(repo, repoPath, defaultBranch),
+                    cpd(repo, repoPath, defaultBranch, 'ecmascript'),
+                    cpd(repo, repoPath, defaultBranch, 'java'),
+                    cpd(repo, repoPath, defaultBranch, 'cs'),
+                    cpd(repo, repoPath, defaultBranch, 'cpp'),
+                    cpd(repo, repoPath, defaultBranch, 'ruby'),
+                    cpd(repo, repoPath, defaultBranch, 'go'),
+                    cpd(repo, repoPath, defaultBranch, 'php')
                 ]).then(function(results) {
                     return {
                         hotspots: results[0],
-                        bugspot: results[1]
+                        bugspot: results[1],
+                        cpd: results[2].concat(results[3]).concat(results[4]).concat(results[5]).concat(results[6]).concat(results[7]).concat(results[8])
                     };
                 });
             });
