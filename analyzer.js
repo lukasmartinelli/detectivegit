@@ -147,7 +147,11 @@ module.exports = function analyze(repo) {
                     return {
                         hotspots: results[0],
                         bugspot: results[1],
-                        cpd: results[2].concat(results[3]).concat(results[4]).concat(results[5]).concat(results[6]).concat(results[7]).concat(results[8])
+                        cpd: results[2].concat(results[3], results[3],
+                             results[4], results[5], results[6], results[7],
+                             results[8]).sort(function(a,b) {
+                            return a.lineCount - b.lineCount;
+                        }).reverse()
                     };
                 });
             });
