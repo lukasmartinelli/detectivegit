@@ -108,7 +108,7 @@ function bugspot(repoName, repoPath, defaultBranch) {
 
 function hotspots(repoName, repoPath, defaultBranch) {
     console.log('Analyzing git hotspots ' + repoPath);
-    var cmd = 'git log --pretty=format: --name-only | sort | uniq -c | sort -rg | head -n 10';
+    var cmd = 'git log --pretty=format: --name-only | sort | uniq -c | sort -rg';
     return exec(cmd, { cwd: repoPath }).then(function(stdout) {
         var gitOutput = stdout[0];
         return gitOutput.split('\n').map(function(line) {
@@ -120,6 +120,8 @@ function hotspots(repoName, repoPath, defaultBranch) {
             };
         }).filter(function(fileReport) {
             return fileReport.modifications && fileReport.path;
+        }).filter(function(fileReport) {
+            return fileReport.modifications > 1;
         });
     });
 }
