@@ -1,4 +1,5 @@
 'use strict';
+var PMD_BINARY = process.env.PMD_BINARY || 'pmd';
 var path = require('path');
 var Q = require('q');
 var exec = Q.denodeify(require('child_process').exec);
@@ -43,10 +44,11 @@ function parseBugspotLine(line) {
 function cpd(repoName, repoPath, defaultBranch, language) {
     console.log('Code duplication for ' + language + ' in ' + repoPath);
     var deferred = Q.defer();
-    var args = ['--minimum-tokens', '20', '--language', language, '--files',  repoPath, '--exclude', 'node_modules', '--format', 'csv'];
-    execFileOldschool('/usr/bin/cpd', args, { cwd: repoPath }, function(err, stdout, stderr) {
+    var args = ['cpd', '--minimum-tokens', '20', '--language', language, '--files',  repoPath, '--exclude', 'node_modules', '--format', 'csv'];
+    execFileOldschool(PMD_BINARY, args, { cwd: repoPath }, function(err, stdout, stderr) {
         if(err && err.code !== 4) {
-            q.reject(err);
+            Q.reject(err);
+            console.error(err);
         }
         var output = stdout.split('\n').slice(1);
         var results = output.map(function(line) {
@@ -144,17 +146,20 @@ module.exports = function analyze(repo) {
                     cpd(repo, repoPath, defaultBranch, 'cpp'),
                     cpd(repo, repoPath, defaultBranch, 'ruby'),
                     cpd(repo, repoPath, defaultBranch, 'go'),
-                    cpd(repo, repoPath, defaultBranch, 'php')
+                    cpd(repo, repoPath, defaultBranch, 'php'),
+                    cpd(repo, repoPath, defaultBranch, 'python')
                 ]).then(function(results) {
                     return {
                         hotspots: results[0],
                         bugspot: results[1],
                         cpd: results[2].concat(results[3], results[3],
                              results[4], results[5], results[6], results[7],
-                             results[8]).sort(function(a,b) {
+                             results[8], results[9]).sort(function(a,b) {
                             return a.lineCount - b.lineCount;
                         }).reverse()
                     };
+                }, function(err) {
+                    console.error(err);
                 });
             });
         })
