@@ -24,6 +24,24 @@ where bugs might occur (based on [Google's bug prediction heuristic](http://goog
 bugspots .
 ```
 
+## Docker
+
+In order to run detectivegit you need `git`, `cpd` and `bugspots`.
+Because these tools require a complex stack consisting of `Node`, `Ruby` and `Java`
+we need Docker to ensure a working environment.
+
+Build image.
+
+```
+docker build -t lukasmartinelli/detectivegit
+```
+
+Run image.
+
+```
+docker run --rm -p 3000:3000 -t lukasmartinelli/detectivegit
+```
+
 ## Todos
 
 - [ ] Store analysis in database (2h)
