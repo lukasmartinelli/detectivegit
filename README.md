@@ -23,3 +23,10 @@ where bugs might occur (based on [Google's bug prediction heuristic](http://goog
 ```
 bugspots .
 ```
+
+## Todos
+
+- [ ] Store analysis in database (2h)
+- [ ] Support sharing the link `/sebubu/bringtoafrica` which will fetch from either the database or run a new analysis (3h)
+- [ ] Limit number of rows and allow expanding (1h)
+- [ ] Show help box for the heuristics (1h)
