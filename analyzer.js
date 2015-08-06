@@ -13,7 +13,7 @@ var mkdtemp = Q.denodeify(temp.mkdir);
 temp.track();
 
 function clone(dirPath, repo) {
-    var cloneUrl = 'https://github.com/' + repo + '.git';
+    var cloneUrl = 'https://nouser:nopass@github.com/' + repo + '.git';
     console.log('Cloning ' + cloneUrl + ' to ' + path.resolve(dirPath));
     return execFile('git', ['clone', '-q', cloneUrl], { cwd: dirPath });
 }
@@ -162,9 +162,6 @@ module.exports = function analyze(repo) {
                     console.error(err);
                 });
             });
-        })
-        .catch(function(err) {
-            console.error(err);
         })
         .fin(function() {
             console.log('Cleaning up ' + dirPath);

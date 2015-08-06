@@ -19,6 +19,13 @@ module.exports = function(app) {
                     cpd: report.cpd
                 }
             });
+        }, function(err) {
+            console.error(err);
+            res.render('error', {
+                repo: {
+                    name: name,
+                }
+            });
         });
     });
 };
