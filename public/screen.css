@@ -35,22 +35,26 @@ h1, h2, h3 {
 h1 {
 	font-size: 8rem;
 	display: inline-block;
-    margin: 0.5rem;
+    margin: 0.5rem auto;
 }
 
 h2 {
 	font-size: 5rem;
-    margin: 0.5rem;
+    margin: 0.5rem auto;
 }
 
 h3 {
 	font-size: 3rem;
-    margin: 0.5rem;
+    margin: 0.5rem auto;
 }
 
 table {
     border-collapse: collapse;
     border-spacing: 0px;
+}
+
+.branding {
+    padding: 0 2rem;
 }
 
 .branding img {
@@ -59,7 +63,7 @@ table {
 }
 
 .main {
-    padding: 0 1rem;
+    padding: 0 2rem;
 }
 
 .repo-info {

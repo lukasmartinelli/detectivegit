@@ -24,9 +24,9 @@ module.exports = function(app) {
                 repo: {
                     name: repoName,
                     url: 'https://github.com/' + repoName,
-                    hotspots: report.hotspots,
-                    bugspot: report.bugspot,
-                    cpd: report.cpd
+                    hotspots: report.hotspots.slice(0, 10),
+                    bugspot: report.bugspot.slice(0, 10),
+                    cpd: report.cpd.slice(0,10)
                 }
             });
         }, function(err) {

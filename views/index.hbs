@@ -17,9 +17,13 @@
         <h2>Report for <a href="{{repo.url}}">{{repo.name}}</a></h2>
 
         <h3>Hotspots</h3>
+        <p>
+            Files that have been modified in alot of commits are probably
+            violating the <a href="https://en.wikipedia.org/wiki/Single_responsibility_principle">SRP principle.</a>
+        </p>
          <table class="filereport-table">
          <colgroup>
-            <col style="width:85px;" span="1">
+            <col style="width:5%;" span="1">
             <col style="width:90%;" span="1">
          </colgroup>
          <thead>
@@ -43,9 +47,12 @@
          </table>
 
         <h3>Predicted bugs</h3>
+        <p>
+        <a href="">Google's bug prediction algorithm</a> detects which files have been touched by a lot of bugfixing commits and predicts the likelihood of bugs occurring in the file in the future.
+        </p>
          <table class="filereport-table">
          <colgroup>
-            <col style="width:85px;" span="1">
+            <col style="width:5%;" span="1">
             <col style="width:90%;" span="1">
          </colgroup>
          <thead>
@@ -69,9 +76,12 @@
          </table>
 
         <h3>Copy Paste Detection</h3>
+        <p>
+        <a href="http://pmd.sourceforge.net/pmd-4.3.0/cpd.html">CPD</a> checks for duplicate code across your repository.
+        </p>
          <table class="filereport-table">
          <colgroup>
-            <col style="width:85px;" span="1">
+            <col style="width:5%;" span="1">
             <col style="width:90%;" span="1">
          </colgroup>
          <thead>
