@@ -1,3 +1,4 @@
+/*eslint new-cap:0 */
 'use strict';
 var Q = require('q');
 var analyze = require('./analyzer');
@@ -26,7 +27,7 @@ module.exports = function(app) {
         res.status(404);
         res.render('error', {
             repo: {
-                name: req.params.owner,
+                name: req.params.owner
             }
         });
     });
@@ -42,7 +43,7 @@ module.exports = function(app) {
                     url: 'https://github.com/' + repoName,
                     hotspots: report.hotspots.slice(0, 10),
                     bugspot: report.bugspot.slice(0, 10),
-                    cpd: report.cpd.slice(0,10)
+                    cpd: report.cpd.slice(0, 10)
                 }
             });
         }, function(err) {
@@ -50,7 +51,7 @@ module.exports = function(app) {
             res.status(500);
             res.render('error', {
                 repo: {
-                    name: repoName,
+                    name: repoName
                 }
             });
         });

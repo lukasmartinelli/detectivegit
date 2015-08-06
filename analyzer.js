@@ -44,8 +44,8 @@ function parseBugspotLine(line) {
 function cpd(repoName, repoPath, defaultBranch, language) {
     console.log('Code duplication for ' + language + ' in ' + repoPath);
     var deferred = Q.defer();
-    var args = ['cpd', '--minimum-tokens', '20', '--language', language, '--files',  repoPath, '--exclude', 'node_modules', '--format', 'csv'];
-    execFileOldschool(PMD_BINARY, args, { cwd: repoPath }, function(err, stdout, stderr) {
+    var args = ['cpd', '--minimum-tokens', '20', '--language', language, '--files', repoPath, '--exclude', 'node_modules', '--format', 'csv'];
+    execFileOldschool(PMD_BINARY, args, { cwd: repoPath }, function(err, stdout) {
         if(err && err.code !== 4) {
             Q.reject(err);
             console.error(err);
@@ -60,10 +60,10 @@ function cpd(repoName, repoPath, defaultBranch, language) {
                 var occurrences = parseInt(columns[2]);
 
                 var duplicationFiles = [];
-                for(var i = 1; i < 2 * occurrences; i+=2) {
+                for(var i = 1; i < 2 * occurrences; i += 2) {
                     var lineNumber = parseInt(columns[2 + i]);
                     var lineTo = lineNumber + lineCount;
-                    var fileName = columns[2 + i+1].replace(repoPath + '/', '');
+                    var fileName = columns[2 + i + 1].replace(repoPath + '/', '');
                     duplicationFiles.push( {
                         lineNumber: lineNumber,
                         fileName: fileName,
@@ -77,7 +77,7 @@ function cpd(repoName, repoPath, defaultBranch, language) {
                     lineCount: lineCount,
                     tokenCount: tokenCount,
                     duplicationFiles: duplicationFiles
-                }
+                };
             }
         }).filter(function(r) {
             return r !== undefined;
@@ -154,7 +154,7 @@ module.exports = function analyze(repo) {
                         bugspot: results[1],
                         cpd: results[2].concat(results[3], results[3],
                              results[4], results[5], results[6], results[7],
-                             results[8], results[9]).sort(function(a,b) {
+                             results[8], results[9]).sort(function(a, b) {
                             return a.lineCount - b.lineCount;
                         }).reverse()
                     };
