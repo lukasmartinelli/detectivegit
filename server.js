@@ -11,11 +11,19 @@ var options = {
     port: process.env.VCAP_APP_PORT || 3000
 };
 
+function errorHandler(err, req, res, next) {
+    console.log(err);
+    res.status(500);
+    res.render('error');
+}
+
 app.engine('hbs', handlebars({extname: 'hbs', defaultLayout: 'main.hbs'}));
 app.set('view engine', 'hbs');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, '/public')));
+app.use(errorHandler);
 
 require('./api')(app);
+
 
 http.listen(options.port);
