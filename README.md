@@ -3,6 +3,8 @@
 Detective git takes a look at your repository and shows you
 where your hotspots and possible bugs are.
 
+http://detectivegit.gq
+
 ![Screenshot of Flinter](screenshot.png)
 
 ## How it works
@@ -42,9 +44,7 @@ Run image.
 docker run --rm -p 3000:3000 -t lukasmartinelli/detectivegit
 ```
 
-## Todos
-
-- [ ] Store analysis in database (2h)
-- [ ] Support sharing the link `/sebubu/bringtoafrica` which will fetch from either the database or run a new analysis (3h)
-- [ ] Limit number of rows and allow expanding (1h)
-- [ ] Show help box for the heuristics (1h)
+Develop with image.
+```
+docker run --rm -v $(pwd):/usr/src/app -p 3000:3000 -t lukasmartinelli/detectivegit
+```
