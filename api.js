@@ -1,5 +1,21 @@
 'use strict';
+var Q = require('q');
 var analyze = require('./analyzer');
+var cache = require('memory-cache');
+
+function getCachedReport(repoName) {
+    var cachedReport = cache.get(repoName);
+
+    if(cachedReport) {
+        return Q(cachedReport);
+    }
+
+    return analyze(repoName).then(function(report) {
+        console.log('Caching report for ' + repoName);
+        cache.put(repoName, report, 300 * 1000);
+        return report;
+    });
+}
 
 module.exports = function(app) {
     app.get('/', function(req, res) {
@@ -18,7 +34,7 @@ module.exports = function(app) {
     app.get('/:owner/:repo', function(req, res) {
         var repoName = req.params.owner + '/' + req.params.repo;
 
-        analyze(repoName).then(function(report) {
+        getCachedReport(repoName).then(function(report) {
             res.status(200);
             res.render('index', {
                 repo: {
