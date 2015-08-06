@@ -3,6 +3,15 @@
         <input id="repo-search" name="name" class="search-box" placeholder="Your GitHub repository" autofocus="" value="{{repo.name}}">
         <button type="submit" class="search-submit">Analyze</button>
     </form>
+    <div class="loader clearfix" style="display: none;">
+        <div class="sk-folding-cube">
+            <div class="sk-cube1 sk-cube"></div>
+            <div class="sk-cube2 sk-cube"></div>
+            <div class="sk-cube4 sk-cube"></div>
+            <div class="sk-cube3 sk-cube"></div>
+        </div>
+        <h3>Cloning and analyzing repo...</h3>
+    </div>
     <article class="repo-info">
         {{#if repo}}
         <h2>Report for <a href="{{repo.url}}">{{repo.name}}</a></h2>
@@ -90,16 +99,6 @@
          {{/each}}
          </tbody>
          </table>
-        {{else}}
-        <div class="loader clearfix">
-            <div class="sk-folding-cube">
-                <div class="sk-cube1 sk-cube"></div>
-                <div class="sk-cube2 sk-cube"></div>
-                <div class="sk-cube4 sk-cube"></div>
-                <div class="sk-cube3 sk-cube"></div>
-            </div>
-            <h3>Cloning and analyzing repo...</h3>
-        </div>
         {{/if}}
     </article>
 </section>

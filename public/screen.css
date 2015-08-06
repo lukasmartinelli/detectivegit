@@ -64,7 +64,6 @@ table {
 
 .repo-info {
     margin-top: 2rem;
-    min-height: 200px;
 }
 
 hr {
@@ -163,6 +162,10 @@ hr {
 .filereport-table ul li {
     list-style-type: none;
     padding: 0.5rem 0px;
+}
+
+.loader {
+    margin-top: 2rem;
 }
 
 .loader h3 {

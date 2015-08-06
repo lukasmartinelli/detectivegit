@@ -6,6 +6,15 @@ module.exports = function(app) {
         res.render('index', {});
     });
 
+    app.get('/:owner/', function(req, res) {
+        res.status(404);
+        res.render('error', {
+            repo: {
+                name: req.params.owner,
+            }
+        });
+    });
+
     app.get('/:owner/:repo', function(req, res) {
         var repoName = req.params.owner + '/' + req.params.repo;
 
