@@ -2,23 +2,29 @@
 'use strict';
 var Q = require('q');
 var analyze = require('./analyzer');
-var cache = require('memory-cache');
 
-function getCachedReport(repoName) {
-    var cachedReport = cache.get(repoName);
+module.exports = function(app, cache) {
+    function getCachedReport(repoName) {
+        var getCache = Q.ninvoke(cache, 'get', repoName);
 
-    if(cachedReport) {
-        return Q(cachedReport);
+        return getCache.then(function(val) {
+            if(val) {
+                return Q(val);
+            } else {
+                return analyze(repoName).then(function(report) {
+                    console.log('Caching report for ' + repoName);
+                    cache.set(repoName, report, 300, function(err) {
+                        if(err) {
+                            console.error(err);
+                        }
+                    });
+                    return report;
+                });
+            }
+        });
+
     }
 
-    return analyze(repoName).then(function(report) {
-        console.log('Caching report for ' + repoName);
-        cache.put(repoName, report, 300 * 1000);
-        return report;
-    });
-}
-
-module.exports = function(app) {
     app.get('/', function(req, res) {
         res.render('index', {});
     });

@@ -23,10 +23,11 @@
   "homepage": "https://github.com/lukasmartinelli/detectivegit",
   "dependencies": {
     "body-parser": "^1.11.0",
+    "cacheman": "^1.1.1",
+    "cacheman-redis": "^0.2.0",
     "express": "^4.10.2",
     "express-handlebars": "^2.0.1",
     "github": "^0.2.3",
-    "memory-cache": "^0.1.4",
     "mkdirp": "^0.5.0",
     "q": "^1.4.1",
     "request": "^2.49.0",
