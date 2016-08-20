@@ -3,7 +3,7 @@
 Detective git takes a look at your repository and shows you
 where your hotspots and possible bugs are.
 
-http://detectivegit.gq
+[**:globe_with_meridians: Check the demo at detectivegit.lukasmartinelli.ch**](http://detectivegit.lukasmartinelli.ch)
 
 ![Screenshot of Flinter](screenshot.png)
 
