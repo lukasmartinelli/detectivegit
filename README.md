@@ -1,9 +1,11 @@
 # detectivegit
 
+> :warning: This repository is no longer maintained by Lukas Martinelli.
+
 Detective git takes a look at your repository and shows you
 where your hotspots and possible bugs are.
 
-[**:globe_with_meridians: Check the demo at detectivegit.lukasmartinelli.ch**](http://detectivegit.lukasmartinelli.ch)
+~~[**:globe_with_meridians: Check the demo at detectivegit.lukasmartinelli.ch**](http://detectivegit.lukasmartinelli.ch)~~
 
 ![Screenshot of Flinter](screenshot.png)
 
